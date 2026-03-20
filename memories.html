@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Memories - Lilu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0a12 0%, #12121f 50%, #0a0a12 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Stars Background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb1 {
+      width: 400px;
+      height: 400px;
+      background: #f59e0b;
+      top: -150px;
+      right: -150px;
+      animation: floatOrb 20s ease-in-out infinite;
+    }
+
+    .orb2 {
+      width: 350px;
+      height: 350px;
+      background: #ec4899;
+      bottom: -100px;
+      left: -100px;
+      animation: floatOrb 25s ease-in-out infinite reverse;
+    }
+
+    .orb3 {
+      width: 250px;
+      height: 250px;
+      background: #a78bfa;
+      top: 50%;
+      left: 50%;
+      animation: floatOrb 18s ease-in-out infinite;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(50px, 30px) scale(1.1); }
+      66% { transform: translate(-30px, 60px) scale(0.9); }
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header-badge {
+      display: inline-block;
+      padding: 8px 25px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: #fcd34d;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #fff 0%, #fcd34d 40%, #f59e0b 70%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-subtitle {
+      font-size: 1.15rem;
+      color: #9ca3af;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+
+    /* Counter */
+    .counter-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 60px;
+      padding: 15px 35px;
+      margin-bottom: 20px;
+    }
+
+    .counter-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .counter-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    .counter-content {
+      text-align: left;
+    }
+
+    .counter-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f59e0b;
+      line-height: 1;
+    }
+
+    .counter-text {
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    /* Photos Grid */
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .photo-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 3px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .photo-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(245, 158, 11, 0.2);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s ease;
+      filter: grayscale(100%) blur(4px) brightness(0.4);
+      transform: scale(1.15);
+    }
+
+    .photo-card.revealed img {
+      filter: grayscale(0%) blur(0px) brightness(1);
+      transform: scale(1);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg, 
+        transparent 0%, 
+        transparent 30%, 
+        rgba(0, 0, 0, 0.7) 70%, 
+        rgba(0, 0, 0, 0.9) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 25px 15px;
+      transition: all 0.4s ease;
+    }
+
+    .photo-card.revealed .photo-overlay {
+      background: linear-gradient(
+        180deg, 
+        transparent 0%, 
+        transparent 50%, 
+        rgba(0, 0, 0, 0.3) 80%, 
+        rgba(0, 0, 0, 0.5) 100%
+      );
+    }
+
+    .photo-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(245, 158, 11, 0.95);
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 25px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .photo-card.revealed .photo-badge {
+      background: rgba(52, 211, 153, 0.95);
+      box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+    }
+
+    .photo-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.2);
+      padding: 8px 18px;
+      border-radius: 25px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .photo-hint-icon {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #fcd34d;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-hint-icon::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #fcd34d;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .photo-hint-text {
+      font-size: 0.75rem;
+      color: #fcd34d;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+
+    .photo-card.revealed .photo-hint {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+
+    .photo-caption {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Reveal All Button */
+    .reveal-all-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 45px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 40px rgba(245, 158, 11, 0.4);
+      margin-bottom: 40px;
+    }
+
+    .reveal-all-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 15px 50px rgba(245, 158, 11, 0.5);
+    }
+
+    .reveal-all-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #fcd34d;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .footer-name {
+      font-size: 1rem;
+      color: #ec4899;
+      font-weight: 500;
+    }
+
+    .footer-hearts {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      animation: heartBeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .photos-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .photos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      
+      .header-title {
+        font-size: 2rem;
+      }
+      
+      .counter-box {
+        padding: 12px 25px;
+      }
+      
+      .counter-number {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .photos-grid {
+        grid-template-columns: 1fr;
+        max-width: 280px;
+        margin: 0 auto 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Elements -->
+  <div class="stars" id="stars"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-badge">Precious Moments</div>
+      <h1 class="header-title">Our Beautiful Memories</h1>
+      <p class="header-subtitle">Every picture tells a story of our friendship. Click on each photo to reveal the beautiful moments we've shared together!</p>
+      
+      <div class="counter-box">
+        <div class="counter-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <div class="counter-content">
+          <div class="counter-number" id="counter">0</div>
+          <div class="counter-text">of 12 memories revealed</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Reveal All Button -->
+    <div style="text-align: center;">
+      <button class="reveal-all-btn" id="revealAllBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        <span>Reveal All Memories</span>
+      </button>
+    </div>
+
+    <!-- Photos Grid -->
+    <div class="photos-grid" id="photosGrid"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-message">"Every moment with you is a treasure that I hold close to my heart, Lilu!"</p>
+      <p class="footer-name">- With love from your Best Friend</p>
+      <div class="footer-hearts">💛 💗 💛</div>
+    </footer>
+  </div>
+
+  <script>
+    // =============================================
+    // APNI 12 PHOTOS KA URL YAHAN DAALO
+    // =============================================
+    var MEMORIES = [
+      { url: 'https://picsum.photos/seed/mem1/400/533', caption: 'That beautiful day we met!', badge: 'Memory 1' },
+      { url: 'https://picsum.photos/seed/mem2/400/533', caption: 'Forever in my heart', badge: 'Memory 2' },
+      { url: 'https://picsum.photos/seed/mem3/400/533', caption: 'Best times together', badge: 'Memory 3' },
+      { url: 'https://picsum.photos/seed/mem4/400/533', caption: 'Unforgettable moments', badge: 'Memory 4' },
+      { url: 'https://picsum.photos/seed/mem5/400/533', caption: 'Pure happiness captured', badge: 'Memory 5' },
+      { url: 'https://picsum.photos/seed/mem6/400/533', caption: 'Special memories we made', badge: 'Memory 6' },
+      { url: 'https://picsum.photos/seed/mem7/400/533', caption: 'Joy and laughter always', badge: 'Memory 7' },
+      { url: 'https://picsum.photos/seed/mem8/400/533', caption: 'Adventures with you', badge: 'Memory 8' },
+      { url: 'https://picsum.photos/seed/mem9/400/533', caption: 'Precious moments frozen', badge: 'Memory 9' },
+      { url: 'https://picsum.photos/seed/mem10/400/533', caption: 'Fun times never end!', badge: 'Memory 10' },
+      { url: 'https://picsum.photos/seed/mem11/400/533', caption: 'Always smiling together', badge: 'Memory 11' },
+      { url: 'https://picsum.photos/seed/mem12/400/533', caption: 'Best friend forever', badge: 'Memory 12' }
+    ];
+
+    var revealedCount = 0;
+
+    // Create Stars
+    function createStars() {
+      var container = document.getElementById('stars');
+      for (var i = 0; i < 100; i++) {
+        var star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = (Math.random() * 2.5 + 1) + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        container.appendChild(star);
+      }
+    }
+
+    // Update Counter
+    function updateCounter() {
+      document.getElementById('counter').textContent = revealedCount;
+    }
+
+    // Load Photos
+    function loadPhotos() {
+      var grid = document.getElementById('photosGrid');
+      grid.innerHTML = '';
+
+      for (var i = 0; i < MEMORIES.length; i++) {
+        (function(memory) {
+          var card = document.createElement('div');
+          card.className = 'photo-card';
+          
+          card.innerHTML = 
+            '<img src="' + memory.url + '" alt="Memory">' +
+            '<div class="photo-overlay">' +
+              '<span class="photo-badge">' + memory.badge + '</span>' +
+              '<div class="photo-hint">' +
+                '<span class="photo-hint-icon"></span>' +
+                '<span class="photo-hint-text">Click to Reveal</span>' +
+              '</div>' +
+              '<p class="photo-caption">' + memory.caption + '</p>' +
+            '</div>';
+          
+          card.onclick = function() {
+            if (!this.classList.contains('revealed')) {
+              this.classList.add('revealed');
+              revealedCount++;
+              updateCounter();
+            }
+          };
+          
+          grid.appendChild(card);
+        })(MEMORIES[i]);
+      }
+    }
+
+    // Reveal All
+    document.getElementById('revealAllBtn').onclick = function() {
+      var cards = document.querySelectorAll('.photo-card');
+      var delay = 0;
+      
+      for (var i = 0; i < cards.length; i++) {
+        (function(card, index) {
+          setTimeout(function() {
+            if (!card.classList.contains('revealed')) {
+              card.classList.add('revealed');
+              revealedCount++;
+              updateCounter();
+            }
+          }, delay);
+          delay += 150;
+        })(cards[i], i);
+      }
+      
+      this.style.opacity = '0.5';
+      this.style.pointerEvents = 'none';
+      this.innerHTML = '<span>All Memories Revealed!</span>';
+    };
+
+    // Init
+    createStars();
+    loadPhotos();
+  </script>
+
+</body>
+</html>
